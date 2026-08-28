@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { MatchInbox } from "@/components/MatchInbox";
 import { MatchModal } from "@/components/MatchModal";
 import { PostProjectForm } from "@/components/PostProjectForm";
@@ -194,14 +195,12 @@ export function HeyDevApp() {
           </h1>
         </div>
         <div className="flex gap-2">
-          <a
+          <Link
             href="/inbox"
-            target="_blank"
-            rel="noreferrer"
             className="rounded-full border border-rose-400/40 px-3 py-2 text-xs font-semibold text-rose-100"
           >
             Pings
-          </a>
+          </Link>
           <button
             type="button"
             onClick={() => setShowInbox(true)}
