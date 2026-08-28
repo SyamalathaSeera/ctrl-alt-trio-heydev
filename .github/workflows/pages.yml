@@ -27,6 +27,7 @@ jobs:
       - name: Static export without API routes
         env:
           GITHUB_PAGES: "true"
+          NEXT_PUBLIC_API_BASE: "https://del-gained-arguments-steady.trycloudflare.com"
         run: |
           rm -rf .next
           mv app/api /tmp/heydev-api

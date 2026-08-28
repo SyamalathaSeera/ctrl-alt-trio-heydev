@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { apiUrl } from "@/lib/api";
 import type { ChatThread } from "@/lib/types";
 
 export function ChatBox({
@@ -17,7 +18,7 @@ export function ChatBox({
     let cancelled = false;
     async function load() {
       try {
-        const res = await fetch(`/api/chat?id=${encodeURIComponent(threadId)}`, {
+        const res = await fetch(apiUrl(`/api/chat?id=${encodeURIComponent(threadId)}`), {
           cache: "no-store",
         });
         if (!res.ok) return;
@@ -38,7 +39,7 @@ export function ChatBox({
   async function send(event: React.FormEvent) {
     event.preventDefault();
     if (!text.trim()) return;
-    const res = await fetch("/api/chat", {
+    const res = await fetch(apiUrl("/api/chat"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: threadId, from, text }),

@@ -1,12 +1,14 @@
 import { TEAM_PROJECTS } from "@/data/team";
+import { corsJson, OPTIONS } from "@/lib/cors";
 import { encryptEmail, maskEmail } from "@/lib/email-crypto";
 import { listOverrides, upsertOverride } from "@/lib/notify-overrides";
 
+export { OPTIONS };
 export const runtime = "nodejs";
 
 export async function GET() {
   const overrides = listOverrides();
-  return Response.json({
+  return corsJson({
     slots: TEAM_PROJECTS.map((project) => {
       const override = overrides.find((item) => item.projectId === project.id);
       return {
@@ -25,12 +27,12 @@ export async function POST(request: Request) {
     const body = (await request.json()) as { emails?: string[] };
     emails = Array.isArray(body.emails) ? body.emails : [];
   } catch {
-    return Response.json({ error: "Invalid JSON" }, { status: 400 });
+    return corsJson({ error: "Invalid JSON" }, { status: 400 });
   }
 
   const filled = emails.map((item) => item.trim()).filter((item) => item.includes("@"));
   if (filled.length !== 3) {
-    return Response.json({ error: "Need exactly three emails" }, { status: 400 });
+    return corsJson({ error: "Need exactly three emails" }, { status: 400 });
   }
 
   TEAM_PROJECTS.forEach((project, index) => {

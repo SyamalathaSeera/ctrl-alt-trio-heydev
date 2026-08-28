@@ -1,6 +1,8 @@
 import { templateIcebreaker } from "@/lib/match";
+import { corsJson, OPTIONS } from "@/lib/cors";
 import type { Project } from "@/lib/types";
 
+export { OPTIONS };
 export const runtime = "nodejs";
 
 type Body = {
@@ -17,18 +19,18 @@ export async function POST(request: Request) {
     skills = Array.isArray(body.skills) ? body.skills : [];
     project = body.project ?? null;
   } catch {
-    return Response.json({ error: "Invalid JSON" }, { status: 400 });
+    return corsJson({ error: "Invalid JSON" }, { status: 400 });
   }
 
   if (!project?.title || !project.owner) {
-    return Response.json({ error: "Missing project" }, { status: 400 });
+    return corsJson({ error: "Missing project" }, { status: 400 });
   }
 
   const fallback = templateIcebreaker(skills, project);
   const key = process.env.GEMINI_API_KEY?.trim();
 
   if (!key) {
-    return Response.json({ icebreaker: fallback, source: "template" });
+    return corsJson({ icebreaker: fallback, source: "template" });
   }
 
   const prompt = [
@@ -63,7 +65,7 @@ export async function POST(request: Request) {
     );
 
     if (!res.ok) {
-      return Response.json({ icebreaker: fallback, source: "template" });
+      return corsJson({ icebreaker: fallback, source: "template" });
     }
 
     const data = (await res.json()) as {
@@ -76,11 +78,11 @@ export async function POST(request: Request) {
       .replace(/^["']|["']$/g, "");
 
     if (!text) {
-      return Response.json({ icebreaker: fallback, source: "template" });
+      return corsJson({ icebreaker: fallback, source: "template" });
     }
 
-    return Response.json({ icebreaker: text, source: "gemini" });
+    return corsJson({ icebreaker: text, source: "gemini" });
   } catch {
-    return Response.json({ icebreaker: fallback, source: "template" });
+    return corsJson({ icebreaker: fallback, source: "template" });
   }
 }

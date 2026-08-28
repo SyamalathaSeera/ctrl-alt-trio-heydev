@@ -51,11 +51,13 @@ export function MatchModal({
             {match.icebreaker}
           </p>
         </div>
-        {match.notify?.delivered ? (
+        {match.notify ? (
           <p className="mt-4 text-sm leading-6 text-stone-300">
-            {match.notify.emailed
-              ? `Gmail sent to ${match.notify.maskedTo}. ${match.project.owner} accepts on Pings, then you can chat.`
-              : `In-app ping is on ${match.project.owner}'s page. Gmail did not go out yet.`}
+            {match.notify.delivered
+              ? match.notify.emailed
+                ? `Gmail sent to ${match.notify.maskedTo}. ${match.project.owner} accepts on Pings, then you can chat.`
+                : `In-app ping is on ${match.project.owner}'s page. Gmail did not go out yet.`
+              : "Ping did not reach the laptop."}
             {match.notify.emailHint ? (
               <>
                 {" "}

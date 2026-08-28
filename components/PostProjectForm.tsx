@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { SKILLS } from "@/data/projects";
+import { apiUrl } from "@/lib/api";
 import type { Project, ProjectTag } from "@/lib/types";
 
 const TAGS: { id: ProjectTag; label: string }[] = [
@@ -49,7 +50,7 @@ export function PostProjectForm({
 
     let emailCipher = "";
     try {
-      const res = await fetch("/api/encrypt", {
+      const res = await fetch(apiUrl("/api/encrypt"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),

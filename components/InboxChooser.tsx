@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { TEAM_MEMBERS, TEAM_PROJECTS } from "@/data/team";
+import { apiUrl } from "@/lib/api";
 
 type Slot = {
   projectId: string;
@@ -17,7 +18,7 @@ export function InboxChooser() {
   const [formError, setFormError] = useState("");
 
   useEffect(() => {
-    fetch("/api/team-emails", { cache: "no-store" })
+    fetch(apiUrl("/api/team-emails"), { cache: "no-store" })
       .then((res) => res.json())
       .then((data: { slots?: Slot[] }) => setSlots(data.slots ?? []))
       .catch(() => undefined);
@@ -26,7 +27,7 @@ export function InboxChooser() {
   async function saveEmails(event: React.FormEvent) {
     event.preventDefault();
     setFormError("");
-    const res = await fetch("/api/team-emails", {
+    const res = await fetch(apiUrl("/api/team-emails"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ emails }),

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChatBox } from "@/components/ChatBox";
 import { TEAM_PROJECTS, memberBySlug } from "@/data/team";
+import { apiUrl } from "@/lib/api";
 import type { InboxPing } from "@/lib/types";
 
 export function DemoInbox({ slug }: { slug: string }) {
@@ -18,10 +19,10 @@ export function DemoInbox({ slug }: { slug: string }) {
     async function load() {
       try {
         const [inboxRes, chatRes] = await Promise.all([
-          fetch(`/api/inbox?member=${encodeURIComponent(slug)}`, {
+          fetch(apiUrl(`/api/inbox?member=${encodeURIComponent(slug)}`), {
             cache: "no-store",
           }),
-          fetch("/api/chat", { cache: "no-store" }),
+          fetch(apiUrl("/api/chat"), { cache: "no-store" }),
         ]);
         if (!inboxRes.ok) {
           if (!cancelled) setPings([]);
@@ -48,7 +49,9 @@ export function DemoInbox({ slug }: { slug: string }) {
           setError("");
         }
       } catch {
-        if (!cancelled) setError("");
+        if (!cancelled) {
+          setError("Can't reach the ping server. Keep the laptop tunnel on.");
+        }
       }
     }
 
@@ -61,7 +64,7 @@ export function DemoInbox({ slug }: { slug: string }) {
   }, [slug, member?.projectId]);
 
   async function accept(threadId: string) {
-    await fetch("/api/chat", {
+    await fetch(apiUrl("/api/chat"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: threadId, action: "accept" }),

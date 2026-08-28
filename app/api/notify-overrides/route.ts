@@ -1,4 +1,5 @@
 import { PROJECTS } from "@/data/projects";
+import { corsJson, OPTIONS } from "@/lib/cors";
 import { encryptEmail, maskEmail } from "@/lib/email-crypto";
 import {
   listOverrides,
@@ -6,6 +7,7 @@ import {
   upsertOverride,
 } from "@/lib/notify-overrides";
 
+export { OPTIONS };
 export const runtime = "nodejs";
 
 export async function GET() {
@@ -19,7 +21,7 @@ export async function GET() {
     };
   });
 
-  return Response.json({
+  return corsJson({
     overrides,
     projects: PROJECTS.map((project) => ({
       id: project.id,
@@ -37,18 +39,18 @@ export async function POST(request: Request) {
     projectId = body.projectId?.trim() ?? "";
     email = body.email?.trim() ?? "";
   } catch {
-    return Response.json({ error: "Invalid JSON" }, { status: 400 });
+    return corsJson({ error: "Invalid JSON" }, { status: 400 });
   }
 
   const project = PROJECTS.find((entry) => entry.id === projectId);
   if (!project) {
-    return Response.json({ error: "Unknown project" }, { status: 400 });
+    return corsJson({ error: "Unknown project" }, { status: 400 });
   }
   if (!email.includes("@")) {
-    return Response.json({ error: "Need a real email" }, { status: 400 });
+    return corsJson({ error: "Need a real email" }, { status: 400 });
   }
   if (listOverrides().length >= 3 && !listOverrides().some((item) => item.projectId === projectId)) {
-    return Response.json({ error: "Three real emails max for the demo" }, { status: 400 });
+    return corsJson({ error: "Three real emails max for the demo" }, { status: 400 });
   }
 
   upsertOverride({
@@ -57,7 +59,7 @@ export async function POST(request: Request) {
     maskedTo: maskEmail(email),
   });
 
-  return Response.json({
+  return corsJson({
     saved: true,
     projectId,
     maskedTo: maskEmail(email),
@@ -68,8 +70,8 @@ export async function DELETE(request: Request) {
   const url = new URL(request.url);
   const projectId = url.searchParams.get("projectId")?.trim() ?? "";
   if (!projectId) {
-    return Response.json({ error: "Missing projectId" }, { status: 400 });
+    return corsJson({ error: "Missing projectId" }, { status: 400 });
   }
   removeOverride(projectId);
-  return Response.json({ removed: true });
+  return corsJson({ removed: true });
 }

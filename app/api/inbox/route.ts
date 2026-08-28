@@ -1,6 +1,8 @@
 import { listPings } from "@/lib/inbox-store";
 import { memberBySlug } from "@/data/team";
+import { corsJson, OPTIONS } from "@/lib/cors";
 
+export { OPTIONS };
 export const runtime = "nodejs";
 
 export async function GET(request: Request) {
@@ -8,9 +10,9 @@ export async function GET(request: Request) {
   const slug = url.searchParams.get("member")?.trim() ?? "";
   const member = slug ? memberBySlug(slug) : null;
   if (slug && !member) {
-    return Response.json({ error: "Unknown teammate" }, { status: 404 });
+    return corsJson({ error: "Unknown teammate" }, { status: 404 });
   }
-  return Response.json({
+  return corsJson({
     pings: listPings(member?.projectId),
   });
 }

@@ -1,5 +1,7 @@
 import { encryptEmail } from "@/lib/email-crypto";
+import { corsJson, OPTIONS } from "@/lib/cors";
 
+export { OPTIONS };
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
@@ -8,12 +10,12 @@ export async function POST(request: Request) {
     const body = (await request.json()) as { email?: string };
     email = body.email?.trim() ?? "";
   } catch {
-    return Response.json({ error: "Invalid JSON" }, { status: 400 });
+    return corsJson({ error: "Invalid JSON" }, { status: 400 });
   }
 
   if (!email.includes("@")) {
-    return Response.json({ error: "Need a real email" }, { status: 400 });
+    return corsJson({ error: "Need a real email" }, { status: 400 });
   }
 
-  return Response.json({ emailCipher: encryptEmail(email) });
+  return corsJson({ emailCipher: encryptEmail(email) });
 }

@@ -1,15 +1,17 @@
 import { randomUUID } from "crypto";
+import { corsJson, OPTIONS } from "@/lib/cors";
 import { getThread, listThreads, saveThread } from "@/lib/chats-store";
 
+export { OPTIONS };
 export const runtime = "nodejs";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const id = url.searchParams.get("id");
   if (id) {
-    return Response.json({ thread: getThread(id) });
+    return corsJson({ thread: getThread(id) });
   }
-  return Response.json({ threads: listThreads() });
+  return corsJson({ threads: listThreads() });
 }
 
 export async function POST(request: Request) {
@@ -30,22 +32,22 @@ export async function POST(request: Request) {
     from = body.from === "owner" ? "owner" : "judge";
     text = body.text?.trim() ?? "";
   } catch {
-    return Response.json({ error: "Invalid JSON" }, { status: 400 });
+    return corsJson({ error: "Invalid JSON" }, { status: 400 });
   }
 
   const thread = getThread(id);
   if (!thread) {
-    return Response.json({ error: "No thread" }, { status: 404 });
+    return corsJson({ error: "No thread" }, { status: 404 });
   }
 
   if (action === "accept") {
     thread.accepted = true;
     saveThread(thread);
-    return Response.json({ thread });
+    return corsJson({ thread });
   }
 
   if (!text) {
-    return Response.json({ error: "Empty message" }, { status: 400 });
+    return corsJson({ error: "Empty message" }, { status: 400 });
   }
 
   thread.messages.push({
@@ -55,5 +57,5 @@ export async function POST(request: Request) {
     at: new Date().toISOString(),
   });
   saveThread(thread);
-  return Response.json({ thread });
+  return corsJson({ thread });
 }

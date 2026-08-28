@@ -21,9 +21,56 @@ import {
   savePosted,
   saveSkills,
 } from "@/lib/storage";
+import { apiUrl } from "@/lib/api";
 import type { MatchRecord, Project, ProjectTag } from "@/lib/types";
 
 type Filter = "all" | ProjectTag;
+
+const PING_FAIL_HINT =
+  "Ping did not reach the laptop. Keep the Cloudflare tunnel running.";
+
+async function sendPing(
+  project: Project,
+  skills: string[],
+  icebreaker: string,
+): Promise<NonNullable<MatchRecord["notify"]>> {
+  try {
+    const notifyRes = await fetch(apiUrl("/api/notify"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ skills, project, icebreaker }),
+    });
+    const notifyData = (await notifyRes.json()) as {
+      delivered?: boolean;
+      emailed?: boolean;
+      emailHint?: string;
+      maskedTo?: string;
+      threadId?: string;
+    };
+    if (notifyRes.ok && notifyData.delivered) {
+      return {
+        delivered: true,
+        emailed: notifyData.emailed,
+        emailHint: notifyData.emailHint,
+        maskedTo: notifyData.maskedTo || "••••",
+        threadId: notifyData.threadId,
+      };
+    }
+    return {
+      delivered: false,
+      emailed: false,
+      emailHint: notifyData.emailHint || PING_FAIL_HINT,
+      maskedTo: notifyData.maskedTo || "••••",
+    };
+  } catch {
+    return {
+      delivered: false,
+      emailed: false,
+      emailHint: PING_FAIL_HINT,
+      maskedTo: "••••",
+    };
+  }
+}
 
 const FILTERS: { id: Filter; label: string }[] = [
   { id: "all", label: "All" },
@@ -89,7 +136,7 @@ export function HeyDevApp() {
     setGeminiLoading(true);
 
     try {
-      const res = await fetch("/api/icebreaker", {
+      const res = await fetch(apiUrl("/api/icebreaker"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ skills, project }),
@@ -103,70 +150,14 @@ export function HeyDevApp() {
         icebreaker: data.icebreaker || draft.icebreaker,
         source: data.source === "gemini" ? "gemini" : "template",
       };
-      try {
-        const notifyRes = await fetch("/api/notify", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            skills,
-            project,
-            icebreaker: finalMatch.icebreaker,
-          }),
-        });
-        const notifyData = (await notifyRes.json()) as {
-          delivered?: boolean;
-          emailed?: boolean;
-          emailHint?: string;
-          maskedTo?: string;
-          threadId?: string;
-        };
-        if (notifyData.delivered) {
-          finalMatch.notify = {
-            delivered: true,
-            emailed: notifyData.emailed,
-            emailHint: notifyData.emailHint,
-            maskedTo: notifyData.maskedTo || "••••",
-            threadId: notifyData.threadId,
-          };
-        }
-      } catch {
-        /* inbox ping is best-effort so the match modal still shows */
-      }
+      finalMatch.notify = await sendPing(project, skills, finalMatch.icebreaker);
       setActiveMatch(finalMatch);
       const next = [finalMatch, ...matches];
       setMatches(next);
       saveMatches(next);
     } catch {
-      try {
-        const notifyRes = await fetch("/api/notify", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            skills,
-            project,
-            icebreaker: draft.icebreaker,
-          }),
-        });
-        const notifyData = (await notifyRes.json()) as {
-          delivered?: boolean;
-          emailed?: boolean;
-          emailHint?: string;
-          maskedTo?: string;
-          threadId?: string;
-        };
-        if (notifyData.delivered) {
-          draft.notify = {
-            delivered: true,
-            emailed: notifyData.emailed,
-            emailHint: notifyData.emailHint,
-            maskedTo: notifyData.maskedTo || "••••",
-            threadId: notifyData.threadId,
-          };
-          setActiveMatch({ ...draft });
-        }
-      } catch {
-        /* still show the match */
-      }
+      draft.notify = await sendPing(project, skills, draft.icebreaker);
+      setActiveMatch({ ...draft });
       const next = [draft, ...matches];
       setMatches(next);
       saveMatches(next);
