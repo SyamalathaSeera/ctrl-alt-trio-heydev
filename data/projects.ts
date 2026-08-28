@@ -29,6 +29,8 @@ export const PROJECTS: Project[] = [
     theyNeed: ["React", "Next.js"],
     tags: ["side-project"],
     city: "Arlington, VA",
+    emailCipher:
+      "MPx9BqkO1890BK5Q.IiLtDqbgiOnhIMgmduYF5A.N-AqaIfii0RUtDvKvX1WHZF1Qt5Psdc",
   },
   {
     id: "office-hours",
@@ -41,6 +43,8 @@ export const PROJECTS: Project[] = [
     theyNeed: ["Design", "Next.js"],
     tags: ["hackathon"],
     city: "DevFest DC",
+    emailCipher:
+      "iDb0ONricVNp8I1o.8-Rv3Mo1WsQWiepWTfglAQ.w5wTj-LBd9KYsFi6-WYg_C6i4S6j0OhxaQ",
   },
   {
     id: "open-311",
@@ -53,6 +57,7 @@ export const PROJECTS: Project[] = [
     theyNeed: ["TypeScript", "Design"],
     tags: ["oss"],
     city: "Washington, DC",
+    emailCipher: "xITKJKsAKkLGifsT.NgL50qTJTdwazBtq1rO-ig.u0xnm7QevaADbJhyNDZLwNs2cA",
   },
   {
     id: "capsule",
@@ -65,6 +70,7 @@ export const PROJECTS: Project[] = [
     theyNeed: ["React", "TypeScript"],
     tags: ["oss"],
     city: "Remote",
+    emailCipher: "CbBEpWLsOdjoOonn.qz1VP9q7btn_7fPl_PPH2g.eaVAu0IAP7-lKsPbMagpf0sn5Hw",
   },
   {
     id: "festival-bites",
@@ -77,6 +83,8 @@ export const PROJECTS: Project[] = [
     theyNeed: ["Mobile", "Design"],
     tags: ["hackathon"],
     city: "Mason Square",
+    emailCipher:
+      "zOCjpEJanld9d1WK.3n42J7QLx_WdfWjN7BCd6Q.ZNxiT34Q5IedELe6CVC865V-_Z-F-CeikvLX",
   },
   {
     id: "rusty-queue",
@@ -89,6 +97,7 @@ export const PROJECTS: Project[] = [
     theyNeed: ["DevOps", "TypeScript"],
     tags: ["oss"],
     city: "Remote",
+    emailCipher: "7TjuEcuvLvIi-u5R.vKZHkHCHIqkl4LbtyeYy7g.EyI6PQI-q4Gm1wZ0TfGWJcKIE0eCZqY",
   },
   {
     id: "pairboard",
@@ -101,6 +110,7 @@ export const PROJECTS: Project[] = [
     theyNeed: ["React", "TypeScript"],
     tags: ["side-project"],
     city: "Alexandria, VA",
+    emailCipher: "WMjpuZ-GeIJI18y-.XZipwh8cl-to3kqRAfM5RA.uRpp3VuzggJndP8ZeBGH6V298eMH",
   },
   {
     id: "model-garden",
@@ -113,6 +123,7 @@ export const PROJECTS: Project[] = [
     theyNeed: ["Next.js", "Design"],
     tags: ["hackathon"],
     city: "DevFest DC",
+    emailCipher: "pi-Gd-KWN1WfghgU.cDCp6eecKHXAGgLBZ73rOg.boG_vieW9NhYT5cVnnyAqfA_s7GTdA",
   },
   {
     id: "a11y-forms",
@@ -125,6 +136,7 @@ export const PROJECTS: Project[] = [
     theyNeed: ["Design", "Product"],
     tags: ["oss"],
     city: "Remote",
+    emailCipher: "Hr2JJA0aDEy7pj_C.QwTJItRqozlHj_AVzzNNDw.Wbc2o9v6l7CR7VBO8MGDnqQrsk5PhQ",
   },
   {
     id: "wardrobe-weather",
@@ -137,5 +149,7 @@ export const PROJECTS: Project[] = [
     theyNeed: ["Python", "AI/ML"],
     tags: ["side-project"],
     city: "Washington, DC",
+    emailCipher:
+      "8DL7n1B6NdtR39of.qsKKfKOWD-ukmxfumGXAoQ.hESLzhk7yabupyzGstpOa-5JCmuUEcyT_08",
   },
 ];

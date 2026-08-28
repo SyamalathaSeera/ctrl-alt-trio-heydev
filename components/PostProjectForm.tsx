@@ -23,6 +23,7 @@ export function PostProjectForm({
   const [have, setHave] = useState<string[]>([]);
   const [need, setNeed] = useState<string[]>([]);
   const [tag, setTag] = useState<ProjectTag>("hackathon");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
   function toggle(list: string[], setList: (next: string[]) => void, skill: string) {
@@ -31,7 +32,7 @@ export function PostProjectForm({
     );
   }
 
-  function submit(event: React.FormEvent) {
+  async function submit(event: React.FormEvent) {
     event.preventDefault();
     if (!title.trim() || !owner.trim() || !problem.trim()) {
       setError("Title, your name, and the problem are required.");
@@ -41,6 +42,29 @@ export function PostProjectForm({
       setError("Pick at least one skill you need.");
       return;
     }
+    if (!email.includes("@")) {
+      setError("Add an email so matches can ping you. It is encrypted before it is stored.");
+      return;
+    }
+
+    let emailCipher = "";
+    try {
+      const res = await fetch("/api/encrypt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const data = (await res.json()) as { emailCipher?: string };
+      if (!data.emailCipher) {
+        setError("Could not encrypt that email.");
+        return;
+      }
+      emailCipher = data.emailCipher;
+    } catch {
+      setError("Could not encrypt that email.");
+      return;
+    }
+
     onCreate({
       id: `posted-${Date.now()}`,
       title: title.trim(),
@@ -51,6 +75,7 @@ export function PostProjectForm({
       theyNeed: need,
       tags: [tag],
       city: "This device",
+      emailCipher,
     });
   }
 
@@ -69,7 +94,8 @@ export function PostProjectForm({
           </button>
         </div>
         <p className="mt-1 text-sm text-stone-400">
-          Lands on your deck first. Saved on this browser only.
+          Lands on your deck first. Your email is AES-encrypted on the server
+          before it is saved.
         </p>
 
         <label className="mt-4 block text-xs font-semibold uppercase tracking-wider text-stone-500">
@@ -88,6 +114,16 @@ export function PostProjectForm({
             onChange={(e) => setOwner(e.target.value)}
             className="mt-1 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-stone-50 outline-none focus:border-rose-400/60"
             placeholder="First name is enough"
+          />
+        </label>
+        <label className="mt-3 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+          Email (encrypted at rest)
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="mt-1 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-stone-50 outline-none focus:border-rose-400/60"
+            placeholder="you@domain.com"
           />
         </label>
         <label className="mt-3 block text-xs font-semibold uppercase tracking-wider text-stone-500">

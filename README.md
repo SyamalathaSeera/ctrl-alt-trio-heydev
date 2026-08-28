@@ -1,6 +1,6 @@
 # HeyDev
 
-Tinder for developer projects. You swipe on a collab brief — a project someone wants to ship — not on a dating profile. Right swipe means you’d build it with them. A match happens only when your **I bring** skills fill what they **need**. Gemini then writes the first message.
+Tinder for developer projects. You swipe on a collab brief — a project someone wants to ship — not on a dating profile. Right swipe means you’d build it with them. A match happens only when your **I bring** skills fill what they **need**. Gemini then writes the first message. Owner emails are stored as AES-256-GCM ciphertext; the server decrypts only to deliver a ping.
 
 No login. Open the live URL and the deck works.
 
@@ -35,15 +35,18 @@ Open [http://localhost:3000](http://localhost:3000).
 | Variable | Where it lives | Purpose |
 | --- | --- | --- |
 | `GEMINI_API_KEY` | `.env.local` locally, Vercel Environment Variables in production | Server-only icebreaker. If missing or Gemini fails, a local template still shows. |
+| `EMAIL_SECRET` | same | AES-256-GCM key for owner emails. If unset, a local demo key is used so the table-round inbox still decrypts. Rotate this for anything real. |
 
 Do not put the key in source, README, or client code.
 
 ## What judges should try (no account)
 
-1. Leave or change the **I bring** chips (defaults: React, TypeScript).
-2. Swipe left to skip, right to ship. Or use the buttons.
-3. When your skills match **They need**, you get **Hey, Dev.** plus an icebreaker.
-4. Optional: **Post** a project (saved in this browser) or open **Matches**.
+1. Open **/inbox** and pick **I am Syamalatha / Puja / Kavya**. Pings are **not** shared — Puja only sees swipes on **Pairboard DC**.
+2. Paste the three emails once on that chooser page if you have not already.
+3. Judge phone: swipe **HeyDev Live** (Syamalatha), **Pairboard DC** (Puja), or **Fest Queue** (Kavya).
+4. That person **Accept and chat** on their own ping page. The judge chats from the match screen.
+
+Judges never log in. They never see a raw email in the GitHub repo. The inbox is a public notification log on this server, which is how a swipe from *their* phone is visible on *your* laptop.
 
 ## Scope we cut
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ChatBox } from "@/components/ChatBox";
 import type { MatchRecord } from "@/lib/types";
 
 export function MatchModal({
@@ -13,6 +14,7 @@ export function MatchModal({
   onClose: () => void;
 }) {
   const [copied, setCopied] = useState(false);
+  const threadId = match.notify?.threadId;
 
   async function copy() {
     try {
@@ -26,7 +28,7 @@ export function MatchModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-4 sm:items-center">
-      <div className="w-full max-w-md rounded-[28px] border border-rose-400/25 bg-[#1a1218] p-6 shadow-[0_30px_80px_rgba(255,77,109,0.18)]">
+      <div className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-[28px] border border-rose-400/25 bg-[#1a1218] p-6 shadow-[0_30px_80px_rgba(255,77,109,0.18)]">
         <p className="text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-rose-300">
           It&apos;s a match
         </p>
@@ -45,10 +47,21 @@ export function MatchModal({
             {loading ? "Gemini is writing the first hey…" : "First message"}
             {!loading && match.source === "template" ? " · local fallback" : null}
           </p>
-          <p className="mt-2 min-h-[4.5rem] text-[15px] leading-6 text-stone-100">
+          <p className="mt-2 text-[15px] leading-6 text-stone-100">
             {match.icebreaker}
           </p>
         </div>
+        {match.notify?.delivered ? (
+          <p className="mt-4 text-sm leading-6 text-stone-300">
+            Ping sent to {match.notify.maskedTo}. {match.project.owner} accepts
+            on Pings, then you can chat.
+          </p>
+        ) : null}
+        {threadId ? (
+          <div className="mt-4">
+            <ChatBox threadId={threadId} from="judge" />
+          </div>
+        ) : null}
         <div className="mt-6 flex gap-3">
           <button
             type="button"

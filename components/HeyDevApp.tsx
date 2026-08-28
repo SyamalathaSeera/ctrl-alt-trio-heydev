@@ -6,6 +6,7 @@ import { MatchModal } from "@/components/MatchModal";
 import { PostProjectForm } from "@/components/PostProjectForm";
 import { SwipeDeck } from "@/components/SwipeDeck";
 import { PROJECTS, SKILLS, DEFAULT_SKILLS } from "@/data/projects";
+import { TEAM_PROJECTS } from "@/data/team";
 import {
   isComplementaryMatch,
   matchReason,
@@ -49,7 +50,7 @@ export function HeyDevApp() {
   }, []);
 
   const deck = useMemo(() => {
-    const all = [...posted, ...PROJECTS];
+    const all = [...TEAM_PROJECTS, ...posted, ...PROJECTS];
     return all.filter((project) => {
       if (seen.includes(project.id)) return false;
       if (filter === "all") return true;
@@ -101,11 +102,62 @@ export function HeyDevApp() {
         icebreaker: data.icebreaker || draft.icebreaker,
         source: data.source === "gemini" ? "gemini" : "template",
       };
+      try {
+        const notifyRes = await fetch("/api/notify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            skills,
+            project,
+            icebreaker: finalMatch.icebreaker,
+          }),
+        });
+        const notifyData = (await notifyRes.json()) as {
+          delivered?: boolean;
+          maskedTo?: string;
+          threadId?: string;
+        };
+        if (notifyData.delivered) {
+          finalMatch.notify = {
+            delivered: true,
+            maskedTo: notifyData.maskedTo || "••••",
+            threadId: notifyData.threadId,
+          };
+        }
+      } catch {
+        /* inbox ping is best-effort so the match modal still shows */
+      }
       setActiveMatch(finalMatch);
       const next = [finalMatch, ...matches];
       setMatches(next);
       saveMatches(next);
     } catch {
+      try {
+        const notifyRes = await fetch("/api/notify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            skills,
+            project,
+            icebreaker: draft.icebreaker,
+          }),
+        });
+        const notifyData = (await notifyRes.json()) as {
+          delivered?: boolean;
+          maskedTo?: string;
+          threadId?: string;
+        };
+        if (notifyData.delivered) {
+          draft.notify = {
+            delivered: true,
+            maskedTo: notifyData.maskedTo || "••••",
+            threadId: notifyData.threadId,
+          };
+          setActiveMatch({ ...draft });
+        }
+      } catch {
+        /* still show the match */
+      }
       const next = [draft, ...matches];
       setMatches(next);
       saveMatches(next);
@@ -134,6 +186,14 @@ export function HeyDevApp() {
           </h1>
         </div>
         <div className="flex gap-2">
+          <a
+            href="/inbox"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full border border-rose-400/40 px-3 py-2 text-xs font-semibold text-rose-100"
+          >
+            Pings
+          </a>
           <button
             type="button"
             onClick={() => setShowInbox(true)}
