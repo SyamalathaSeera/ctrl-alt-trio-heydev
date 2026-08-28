@@ -1,6 +1,12 @@
 import { notFound } from "next/navigation";
 import { DemoInbox } from "@/components/DemoInbox";
-import { memberBySlug } from "@/data/team";
+import { TEAM_MEMBERS, memberBySlug } from "@/data/team";
+
+export function generateStaticParams() {
+  return TEAM_MEMBERS.map((member) => ({ slug: member.slug }));
+}
+
+export const dynamicParams = false;
 
 export default async function MemberInboxPage({
   params,

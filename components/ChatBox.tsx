@@ -16,11 +16,16 @@ export function ChatBox({
   useEffect(() => {
     let cancelled = false;
     async function load() {
-      const res = await fetch(`/api/chat?id=${encodeURIComponent(threadId)}`, {
-        cache: "no-store",
-      });
-      const data = (await res.json()) as { thread?: ChatThread | null };
-      if (!cancelled) setThread(data.thread ?? null);
+      try {
+        const res = await fetch(`/api/chat?id=${encodeURIComponent(threadId)}`, {
+          cache: "no-store",
+        });
+        if (!res.ok) return;
+        const data = (await res.json()) as { thread?: ChatThread | null };
+        if (!cancelled) setThread(data.thread ?? null);
+      } catch {
+        /* static hosts have no chat API */
+      }
     }
     load();
     const timer = window.setInterval(load, 1200);

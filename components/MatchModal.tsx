@@ -53,8 +53,15 @@ export function MatchModal({
         </div>
         {match.notify?.delivered ? (
           <p className="mt-4 text-sm leading-6 text-stone-300">
-            Ping sent to {match.notify.maskedTo}. {match.project.owner} accepts
-            on Pings, then you can chat.
+            {match.notify.emailed
+              ? `Gmail sent to ${match.notify.maskedTo}. ${match.project.owner} accepts on Pings, then you can chat.`
+              : `In-app ping is on ${match.project.owner}'s page. Gmail did not go out yet.`}
+            {match.notify.emailHint ? (
+              <>
+                {" "}
+                {match.notify.emailHint}
+              </>
+            ) : null}
           </p>
         ) : null}
         {threadId ? (

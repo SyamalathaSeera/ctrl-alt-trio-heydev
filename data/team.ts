@@ -35,7 +35,7 @@ export const TEAM_PROJECTS: Project[] = [
     owner: "Syamalatha",
     ownerRole: "Teammate",
     problem:
-      "The collab deck you’re on right now. Right swipe and only Syamalatha gets the ping.",
+      "The collab deck you’re on right now. Right swipe to send a collab ping.",
     theyHave: ["TypeScript", "Product"],
     theyNeed: ["React"],
     tags: ["hackathon"],
@@ -49,7 +49,7 @@ export const TEAM_PROJECTS: Project[] = [
     owner: "Puja",
     ownerRole: "Teammate",
     problem:
-      "A 30-second pairing board for this room. Right swipe notifies Puja only.",
+      "A 30-second pairing board for this room. Right swipe to send a collab ping.",
     theyHave: ["Design", "Product"],
     theyNeed: ["React"],
     tags: ["hackathon"],
@@ -63,7 +63,7 @@ export const TEAM_PROJECTS: Project[] = [
     owner: "Kavya",
     ownerRole: "Teammate",
     problem:
-      "Office-hours waitlist so mentors stop drowning in DMs. Right swipe notifies Kavya only.",
+      "Office-hours waitlist so mentors stop drowning in DMs. Right swipe to send a collab ping.",
     theyHave: ["Firebase", "Product"],
     theyNeed: ["React"],
     tags: ["hackathon"],

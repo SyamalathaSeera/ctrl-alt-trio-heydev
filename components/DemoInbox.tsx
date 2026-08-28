@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChatBox } from "@/components/ChatBox";
-import { memberBySlug } from "@/data/team";
+import { TEAM_PROJECTS, memberBySlug } from "@/data/team";
 import type { InboxPing } from "@/lib/types";
 
 export function DemoInbox({ slug }: { slug: string }) {
@@ -23,10 +23,16 @@ export function DemoInbox({ slug }: { slug: string }) {
           }),
           fetch("/api/chat", { cache: "no-store" }),
         ]);
+        if (!inboxRes.ok) {
+          if (!cancelled) setPings([]);
+          return;
+        }
         const data = (await inboxRes.json()) as { pings?: InboxPing[] };
-        const chats = (await chatRes.json()) as {
-          threads?: { id: string; accepted?: boolean; projectId?: string }[];
-        };
+        const chats = chatRes.ok
+          ? ((await chatRes.json()) as {
+              threads?: { id: string; accepted?: boolean; projectId?: string }[];
+            })
+          : { threads: [] };
         if (!cancelled) {
           setPings(data.pings ?? []);
           setAccepted(
@@ -42,7 +48,7 @@ export function DemoInbox({ slug }: { slug: string }) {
           setError("");
         }
       } catch {
-        if (!cancelled) setError("Inbox unreachable.");
+        if (!cancelled) setError("");
       }
     }
 
@@ -64,17 +70,18 @@ export function DemoInbox({ slug }: { slug: string }) {
   }
 
   if (!member) return null;
+  const project = TEAM_PROJECTS.find((item) => item.id === member.projectId);
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-lg flex-col px-4 py-6">
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-rose-300">
-        HeyDev pings
+        HeyDev
       </p>
       <h1 className="font-[family-name:var(--font-display)] text-4xl italic text-stone-50">
-        {member.name}
+        {project?.title ?? "Pings"}
       </h1>
       <p className="mt-3 text-sm leading-6 text-stone-300">
-        Only requests for your card. Syamalatha and Kavya will not see these.
+        Incoming collab requests for this project.
       </p>
       <div className="mt-4 flex gap-2">
         <Link
@@ -87,7 +94,7 @@ export function DemoInbox({ slug }: { slug: string }) {
           href="/inbox"
           className="rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-stone-100"
         >
-          Switch person
+          All projects
         </Link>
       </div>
 
@@ -95,8 +102,7 @@ export function DemoInbox({ slug }: { slug: string }) {
 
       {pings.length === 0 ? (
         <p className="mt-10 rounded-[28px] border border-dashed border-white/15 px-5 py-10 text-center text-sm text-stone-400">
-          No requests yet. When a judge right-swipes your card, it lands here —
-          not on the other two ping pages.
+          No requests yet. A right swipe on this card lands here.
         </p>
       ) : (
         <ul className="mt-6 space-y-3">
@@ -106,7 +112,7 @@ export function DemoInbox({ slug }: { slug: string }) {
               className="rounded-[24px] border border-rose-400/20 bg-[#16111a] p-4"
             >
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-rose-300">
-                Request for {member.name}
+                New request
               </p>
               <p className="mt-2 text-lg font-semibold text-stone-50">
                 {ping.projectTitle}

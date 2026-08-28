@@ -114,12 +114,16 @@ export function HeyDevApp() {
         });
         const notifyData = (await notifyRes.json()) as {
           delivered?: boolean;
+          emailed?: boolean;
+          emailHint?: string;
           maskedTo?: string;
           threadId?: string;
         };
         if (notifyData.delivered) {
           finalMatch.notify = {
             delivered: true,
+            emailed: notifyData.emailed,
+            emailHint: notifyData.emailHint,
             maskedTo: notifyData.maskedTo || "••••",
             threadId: notifyData.threadId,
           };
@@ -144,12 +148,16 @@ export function HeyDevApp() {
         });
         const notifyData = (await notifyRes.json()) as {
           delivered?: boolean;
+          emailed?: boolean;
+          emailHint?: string;
           maskedTo?: string;
           threadId?: string;
         };
         if (notifyData.delivered) {
           draft.notify = {
             delivered: true,
+            emailed: notifyData.emailed,
+            emailHint: notifyData.emailHint,
             maskedTo: notifyData.maskedTo || "••••",
             threadId: notifyData.threadId,
           };

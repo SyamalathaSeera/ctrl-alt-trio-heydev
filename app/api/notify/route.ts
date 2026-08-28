@@ -91,11 +91,11 @@ export async function POST(request: Request) {
   const mailed = await sendMatchEmail({
     to,
     subject: `HeyDev: someone wants to ship ${project.title} with you`,
+    origin: appUrl,
     text: [
       `A judge right-swiped ${project.title}.`,
       icebreaker ? `\nTheir hey:\n${icebreaker}\n` : "",
       `This ping is only on your page. Accept and chat: ${appUrl.replace(/\/$/, "")}${pingPath}`,
-      "If this is the first HeyDev mail, confirm the FormSubmit activation email once (check spam), then later swipes will land in Gmail.",
     ].join("\n"),
   });
 
@@ -103,6 +103,7 @@ export async function POST(request: Request) {
     delivered: true,
     emailed: mailed.sent,
     emailVia: mailed.via,
+    emailHint: mailed.hint,
     maskedTo,
     emailCipher,
     threadId,

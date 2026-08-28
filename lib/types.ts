@@ -21,6 +21,8 @@ export type MatchRecord = {
   at: string;
   notify?: {
     delivered: boolean;
+    emailed?: boolean;
+    emailHint?: string;
     maskedTo: string;
     threadId?: string;
   };

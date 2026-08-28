@@ -14,12 +14,12 @@ Ctrl Alt Trio
 
 ## Live URL
 
-Public app (reachable while this machine is running the production server):
-https://del-gained-arguments-steady.trycloudflare.com
+**GitHub Pages (opens on venue Wi‑Fi):**
+https://syamalathaseera.github.io/ctrl-alt-trio-heydev/
 
 Repo: https://github.com/SyamalathaSeera/ctrl-alt-trio-heydev
 
-For a durable judge URL, import that GitHub repo at [vercel.com/new](https://vercel.com/new), then add `GEMINI_API_KEY` under Project → Settings → Environment Variables (never in the repo). After `npx vercel login`, `npx vercel --prod` also works.
+Vercel (`https://heydev-two.vercel.app`) is blocked on this network by Cisco Umbrella. Use GitHub Pages for judges. The swipe deck and match screen work there. Inbox/email APIs stay on this laptop’s Cloudflare tunnel if you need them during the table round.
 
 ## How to run
 
@@ -43,10 +43,10 @@ Do not put the key in source, README, or client code.
 
 ## What judges should try (no account)
 
-1. Open **/inbox** and pick **I am Syamalatha / Puja / Kavya**. Pings are **not** shared — Puja only sees swipes on **Pairboard DC**.
-2. Paste the three emails once on that chooser page if you have not already.
-3. Judge phone: swipe **HeyDev Live** (Syamalatha), **Pairboard DC** (Puja), or **Fest Queue** (Kavya).
-4. That person **Accept and chat** on their own ping page. The judge chats from the match screen.
+1. Open **/inbox** and pick a project (**HeyDev Live**, **Pairboard DC**, or **Fest Queue**). Each list is separate.
+2. Paste the three emails once on that page if you have not already.
+3. Judge phone: swipe **HeyDev Live**, **Pairboard DC**, or **Fest Queue**.
+4. **Accept and chat** on that project’s ping page. The judge chats from the match screen.
 
 Judges never log in. They never see a raw email in the GitHub repo. The inbox is a public notification log on this server, which is how a swipe from *their* phone is visible on *your* laptop.
 
