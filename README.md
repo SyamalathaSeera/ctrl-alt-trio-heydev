@@ -1,21 +1,23 @@
 # HeyDev
 
-Tinder for developer projects. You swipe on a collab brief — a project someone wants to ship — not on a dating profile. Right swipe means you’d build it with them. A match happens only when your **I bring** skills fill what they **need**. Gemini then writes the first message. Owner emails are stored as AES-256-GCM ciphertext; the server decrypts only to deliver a ping.
+HeyDev is Tinder for developer projects. You swipe on a collab brief — a project someone wants to ship — not on a dating profile. Right swipe means you’d build it with them. A match happens only when your **I bring** skills fill what they **need**. Gemini then writes the first message. Owner emails are stored as AES-256-GCM ciphertext; the server decrypts only to deliver a ping.
 
 No login. Open the live URL and the deck works.
 
 ## Team
 
-- Syamalatha Seera
+Ctrl Alt Trio
 
-Add remaining teammates here before submission.
+- Syamalatha Seera
+- Puja
+- Kavya
 
 ## Live URL
 
 Public app (reachable while this machine is running the production server):
-https://bone-sol-feel-utilities.trycloudflare.com
+https://del-gained-arguments-steady.trycloudflare.com
 
-Repo: https://github.com/SyamalathaSeera/Dinder
+Repo: https://github.com/SyamalathaSeera/ctrl-alt-trio-heydev
 
 For a durable judge URL, import that GitHub repo at [vercel.com/new](https://vercel.com/new), then add `GEMINI_API_KEY` under Project → Settings → Environment Variables (never in the repo). After `npx vercel login`, `npx vercel --prod` also works.
 

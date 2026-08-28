@@ -42,7 +42,7 @@ export function InboxChooser() {
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-lg flex-col px-4 py-6">
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-rose-300">
-        Team only
+        HeyDev · Ctrl Alt Trio
       </p>
       <h1 className="font-[family-name:var(--font-display)] text-4xl italic text-stone-50">
         Whose pings?

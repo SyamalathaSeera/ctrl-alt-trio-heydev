@@ -13,9 +13,9 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "HeyDev — Tinder for developer projects",
+  title: "HeyDev",
   description:
-    "Swipe on projects people want help shipping. Right swipe means you'd build it with them. No login.",
+    "HeyDev: swipe on projects people want help shipping. Right swipe means you'd build it with them. No login.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

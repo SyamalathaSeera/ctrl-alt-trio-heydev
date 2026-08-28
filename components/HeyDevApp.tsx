@@ -179,7 +179,7 @@ export function HeyDevApp() {
       <header className="flex items-center justify-between gap-3">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-rose-300">
-            Tinder for projects
+            Ctrl Alt Trio
           </p>
           <h1 className="font-[family-name:var(--font-display)] text-4xl italic text-stone-50">
             HeyDev
