@@ -5,7 +5,7 @@ import { MatchInbox } from "@/components/MatchInbox";
 import { MatchModal } from "@/components/MatchModal";
 import { PostProjectForm } from "@/components/PostProjectForm";
 import { SwipeDeck } from "@/components/SwipeDeck";
-import { PROJECTS, SKILLS } from "@/data/projects";
+import { PROJECTS, SKILLS, DEFAULT_SKILLS } from "@/data/projects";
 import {
   isComplementaryMatch,
   matchReason,
@@ -31,8 +31,7 @@ const FILTERS: { id: Filter; label: string }[] = [
 ];
 
 export function HeyDevApp() {
-  const [ready, setReady] = useState(false);
-  const [skills, setSkills] = useState<string[]>([]);
+  const [skills, setSkills] = useState<string[]>(DEFAULT_SKILLS);
   const [posted, setPosted] = useState<Project[]>([]);
   const [seen, setSeen] = useState<string[]>([]);
   const [matches, setMatches] = useState<MatchRecord[]>([]);
@@ -47,7 +46,6 @@ export function HeyDevApp() {
     setSkills(loadSkills());
     setPosted(loadPosted());
     setMatches(loadMatches());
-    setReady(true);
   }, []);
 
   const deck = useMemo(() => {
@@ -122,14 +120,6 @@ export function HeyDevApp() {
     savePosted(next);
     setSeen((prev) => prev.filter((id) => id !== project.id));
     setShowPost(false);
-  }
-
-  if (!ready) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center text-stone-400">
-        Loading HeyDev…
-      </div>
-    );
   }
 
   return (

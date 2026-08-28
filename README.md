@@ -12,7 +12,12 @@ Add remaining teammates here before submission.
 
 ## Live URL
 
-Add the Vercel URL here after deploy.
+Public app (reachable while this machine is running the production server):
+https://bone-sol-feel-utilities.trycloudflare.com
+
+Repo: https://github.com/SyamalathaSeera/Dinder
+
+For a durable judge URL, import that GitHub repo at [vercel.com/new](https://vercel.com/new), then add `GEMINI_API_KEY` under Project → Settings → Environment Variables (never in the repo). After `npx vercel login`, `npx vercel --prod` also works.
 
 ## How to run
 
